@@ -17,8 +17,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from upload.views import upload_pdf  # import the view
+from upload.views import match_jobs
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('upload/', upload_pdf),  # add this line
+    path('match/', match_jobs),
 ]
