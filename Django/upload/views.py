@@ -6,6 +6,36 @@ import os
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
+import PyPDF2
+
+from transformers import BartForConditionalGeneration, BartTokenizer
+
+class ResumeSummarizer:
+    def __init__(self):
+        self.tokenizer = BartTokenizer.from_pretrained('facebook/bart-large-cnn')
+        self.model = BartForConditionalGeneration.from_pretrained('facebook/bart-large-cnn')
+
+    def summarize(self, text):
+        inputs = self.tokenizer.encode("summarize: " + text, return_tensors="pt", max_length=1024, truncation=True)
+        outputs = self.model.generate(inputs, max_length=300, min_length=150, length_penalty=2.0, num_beams=4, early_stopping=True)
+        summary = self.tokenizer.decode(outputs[0], skip_special_tokens=True)
+        return summary
+
+def extract_and_summarize(pdf):
+    text = extract_text_from_pdf(pdf)
+    summarizer = ResumeSummarizer()
+    summary = summarizer.summarize(text)
+    print("Summary:", summary)
+
+
+def extract_text_from_pdf(pdf_path):
+    reader = PyPDF2.PdfReader(pdf_path)
+    text = ""
+    for page in reader.pages:
+        text += page.extract_text()
+    return text
+
+
 @csrf_exempt
 def upload_pdf(request):
     if request.method == 'POST':
@@ -37,6 +67,10 @@ def match_jobs(request):
                 # Now you have resume and user filter input
                 # You can use resume to match jobs
                 
+                string_test = extract_and_summarize(pdf_file)
+                print(string_test)
+
+
                 return JsonResponse({'received_data': file_path})
     else:
         return HttpResponse('Method not allowed', status=405)
