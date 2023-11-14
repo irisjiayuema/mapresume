@@ -5,8 +5,10 @@ import json
 import os
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-
+import subprocess
 import PyPDF2
+from sshtunnel import SSHTunnelForwarder
+import paramiko
 
 from transformers import BartForConditionalGeneration, BartTokenizer
 
@@ -35,6 +37,32 @@ def extract_text_from_pdf(pdf_path):
         text += page.extract_text()
     return text
 
+def execute_spark():
+    #cmd = "source ~/.bashrc && /opt/bin/spark-submit --jars $HADOOP_HOME/share/hadoop/common/lib/*"
+    cmd = ("bash -lc '/opt/bin/spark-submit'")
+    remote_server_ip = 'cluster.cs.sfu.ca'
+    ssh_username = 'cwa260'
+    ssh_password = 'Qwer19951029'
+    remote_port = 24
+
+    with SSHTunnelForwarder(
+        (remote_server_ip, remote_port),
+        ssh_username=ssh_username,
+        ssh_password=ssh_password,
+        local_bind_addresses=[('localhost', 8088), ('localhost', 9870)],
+        remote_bind_addresses=[('controller.local', 8088), ('controller.local', 9870)]
+    ) as server:
+        
+        ssh_client = paramiko.SSHClient()
+        ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        ssh_client.connect(remote_server_ip, port=remote_port, username=ssh_username, password=ssh_password)
+        
+        stdin, stdout, stderr = ssh_client.exec_command(cmd)
+        #stdin, stdout, stderr = ssh_client.exec_command(cmd)
+        print("Output:", stdout.read().decode())
+        print("Errors:", stderr.read().decode())
+
+        ssh_client.close()
 
 @csrf_exempt
 def upload_pdf(request):
@@ -69,8 +97,7 @@ def match_jobs(request):
                 
                 string_test = extract_and_summarize(pdf_file)
                 print(string_test)
-
-
+                execute_spark()
                 return JsonResponse({'received_data': file_path})
     else:
         return HttpResponse('Method not allowed', status=405)
