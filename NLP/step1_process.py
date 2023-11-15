@@ -7,12 +7,13 @@ import numpy as np
 from pyspark.sql import SparkSession, functions, types
 
 from pyspark.sql.types import ArrayType, IntegerType, FloatType
+from pyspark.sql.functions import ltrim, rtrim, trim, regexp_replace
 from pyspark.sql.functions import udf
 
 max_len = 512
 
 def encode(text):
-    enc = distilbert_tokenizer.encode(text)
+    enc = tokenizer.encode(text)
     len_enc = len(enc)
     if len_enc < max_len:
         enc += [0] * (max_len - len_enc)
@@ -26,11 +27,18 @@ def main(inputs):
     # filter out null Job Descriptions
     df_filtered = df.where(df['JD'].isNotNull())
 
-    #df_cleaned = df_filtered.select('JT', df_filtered['JT'].strip())
+    df_cleaned = df_filtered.select(ltrim(rtrim(regexp_replace(df_filtered['JT'], "[\n\r]", " "))).alias('Job_Title'),
+        ltrim(rtrim(regexp_replace(df_filtered['Company'], "[\n\r]", " "))).alias('Company'),
+        df_filtered['JD'].alias('Job_Description'),
+        ltrim(rtrim(regexp_replace(df_filtered['Link'], "[\n\r]", " "))).alias('Link'),
+        ltrim(rtrim(regexp_replace(df_filtered['Location'], "[\n\r]", " "))).alias('Location'),
+        ltrim(rtrim(regexp_replace(df_filtered['Validate'], "[\n\r]", " "))).alias('Validate')
+        )
     
     tokenize_dbert_udf = udf(encode, ArrayType(IntegerType()))
-    #df_encoding = df_cleaned.withColumn('Encoding_Distilbert', tokenize_dbert_udf(df['JD']))
-    df_encoding = df_filtered.withColumn('Encoding_Distilbert', tokenize_dbert_udf(df['JD']))
+    df_encoding = df_cleaned.withColumn('Encoding', tokenize_dbert_udf(df_cleaned['Job_Description']))
+    
+    df_encoding.show()
 
     df_encoding.write.json(output, compression='gzip', mode='overwrite')
     
@@ -46,6 +54,6 @@ if __name__ == '__main__':
     inputs = 'Test2.json'
     output = 'tokenized_data'
 
-    distilbert_tokenizer = AutoTokenizer.from_pretrained("distilbert-base-uncased")
+    tokenizer = AutoTokenizer.from_pretrained("sentence-transformers/all-MiniLM-L6-v2")
 
     main(inputs)
