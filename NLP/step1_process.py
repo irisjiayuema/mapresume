@@ -2,15 +2,45 @@ import os
 import sys
 assert sys.version_info >= (3, 5) # make sure we have Python 3.5+
 
+# from transformers import (
+#     TokenClassificationPipeline,
+#     AutoModelForTokenClassification,
+#     AutoTokenizer,
+# )
+# from transformers.pipelines import AggregationStrategy
 from transformers import AutoTokenizer
 import numpy as np
 from pyspark.sql import SparkSession, functions, types
 
-from pyspark.sql.types import ArrayType, IntegerType, FloatType
+from pyspark.sql.types import ArrayType, IntegerType, FloatType, StringType
 from pyspark.sql.functions import ltrim, rtrim, trim, regexp_replace
 from pyspark.sql.functions import udf
 
+# from pyspark.ml.feature import StopWordsRemover
+# import nltk
+# nltk.download('stopwords')
+# from nltk.corpus import stopwords
+
 max_len = 512
+
+#Define keyphrase extraction pipeline
+# class KeyphraseExtractionPipeline(TokenClassificationPipeline):
+#     def __init__(self, model, *args, **kwargs):
+#         super().__init__(
+#             model=AutoModelForTokenClassification.from_pretrained(model),
+#             tokenizer=AutoTokenizer.from_pretrained(model),
+#             *args,
+#             **kwargs
+#         )
+
+#     def postprocess(self, all_outputs):
+#         results = super().postprocess(
+#             all_outputs=all_outputs,
+#             aggregation_strategy=AggregationStrategy.SIMPLE,
+#         )
+#         keywords = list(np.unique([result.get("word").strip() for result in results]))
+#         keywords_str = ';'.join(keywords)
+#         return keywords_str
 
 def encode(text):
     enc = tokenizer.encode(text)
@@ -36,6 +66,9 @@ def main(inputs):
         )
     
     tokenize_dbert_udf = udf(encode, ArrayType(IntegerType()))
+    # keywords_udf = udf(extractor, StringType())
+    #df_encoding = df_cleaned.withColumns({'Encoding': tokenize_dbert_udf(df_cleaned['Job_Description']),
+    #    'Keywords': keywords_udf(df_cleaned['Job_Description'])})
     df_encoding = df_cleaned.withColumn('Encoding', tokenize_dbert_udf(df_cleaned['Job_Description']))
     
     df_encoding.show()
@@ -51,9 +84,15 @@ if __name__ == '__main__':
     spark.sparkContext.setLogLevel('WARN')
     sc = spark.sparkContext
 
-    inputs = 'Test2.json'
+    inputs = 'Glassdoor_test_clean.json'
     output = 'tokenized_data'
 
     tokenizer = AutoTokenizer.from_pretrained("sentence-transformers/all-MiniLM-L6-v2")
+    # # Load pipeline
+    # model_name = "ml6team/keyphrase-extraction-kbir-inspec"
+    # extractor = KeyphraseExtractionPipeline(model=model_name)
+    # print(extractor('computer science cs software shiet'))
+
+    # stopwords_eng = set(stopwords.words('english'))
 
     main(inputs)
