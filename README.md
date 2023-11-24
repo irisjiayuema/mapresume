@@ -20,5 +20,6 @@ On your Terminal or Console
 2. npm install -g @vue/cli
 3. vue create my-vue-app (mapresume-app already created)
 4. cd mapresume-app
-5. npm run serve
-6. http://localhost:8080/
+5. pip install djiango-cors-headers
+6. npm run serve
+7. http://localhost:8080/

@@ -9,7 +9,7 @@ import subprocess
 import PyPDF2
 from sshtunnel import SSHTunnelForwarder
 import paramiko
-
+import ast
 from transformers import BartForConditionalGeneration, BartTokenizer
 
 class ResumeSummarizer:
@@ -37,9 +37,8 @@ def extract_text_from_pdf(pdf_path):
         text += page.extract_text()
     return text
 
-def execute_spark():
-    #cmd = "source ~/.bashrc && /opt/bin/spark-submit --jars $HADOOP_HOME/share/hadoop/common/lib/*"
-    cmd = ("bash -lc '/opt/bin/spark-submit'")
+def execute_spark(input_string):
+    cmd = (f"bash -lc '/opt/bin/spark-submit /home/cwa260/big-data-lab-I-final/NLP/step2_sim.py \'{input_string}\' '")
     remote_server_ip = 'cluster.cs.sfu.ca'
     ssh_username = 'cwa260'
     ssh_password = 'Qwer19951029'
@@ -58,11 +57,10 @@ def execute_spark():
         ssh_client.connect(remote_server_ip, port=remote_port, username=ssh_username, password=ssh_password)
         
         stdin, stdout, stderr = ssh_client.exec_command(cmd)
-        #stdin, stdout, stderr = ssh_client.exec_command(cmd)
-        print("Output:", stdout.read().decode())
-        print("Errors:", stderr.read().decode())
-
+        stdin_str = stdout.read().decode()
+        stderr_str = stderr.read().decode()
         ssh_client.close()
+        return stdin_str, stderr_str
 
 @csrf_exempt
 def upload_pdf(request):
@@ -79,9 +77,6 @@ def upload_pdf(request):
 @csrf_exempt
 def match_jobs(request):
     if request.method == 'GET':
-        #data = json.loads(request.body)
-        #string_array = data.get('strings', [])
-        #resume_filename = data.get('resume_file', '')
         fs = FileSystemStorage()
         list_of_files = fs.listdir('')[1]  # Replace 'your_directory_here' with the appropriate directory
         list_of_files.sort(key=lambda x: fs.get_created_time(os.path.join('', x)))  # Sort by creation time
@@ -95,9 +90,23 @@ def match_jobs(request):
                 # Now you have resume and user filter input
                 # You can use resume to match jobs
                 
-                string_test = extract_and_summarize(pdf_file)
-                print(string_test)
-                execute_spark()
-                return JsonResponse({'received_data': file_path})
+                input_string = extract_and_summarize(pdf_file)
+                print(input_string)
+                stdin_str, stderr_str = execute_spark(input_string)
+                index = stdin_str.find("['{")
+                stdin_str = stdin_str[index:]
+                #print(index)
+                #print(stdin_str)
+                evaluated_list = ast.literal_eval(stdin_str)
+                combined_data = {}
+                for index, json_str in enumerate(evaluated_list):
+                    try:
+                        data = json.loads(json_str)
+                        combined_data[f'item_{index}'] = data
+                    except json.JSONDecodeError as e:
+                        return JsonResponse({'error': f'Invalid JSON at index {index}'}, status=400)
+                
+                # Return the combined data as a JsonResponse
+                return JsonResponse(combined_data)
     else:
         return HttpResponse('Method not allowed', status=405)
