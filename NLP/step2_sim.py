@@ -65,10 +65,10 @@ def main(inputs):
     df_filtered = df_keys.filter(df_keys['Keywords_count'] > 0)
     
     #df_filtered = df_encoding.filter(df_encoding['Job_Description'].rlike(resume_keywords))
-    df_filtered.orderBy('Keywords_count', ascending = False).show()
+    #df_filtered.orderBy('Keywords_count', ascending = False).show()
 
-    df_cos_sim = df_filtered.withColumn('Cosine_Similarity', cos_sim_udf(df_encoding['Encoding']))\
-        .orderBy('Cosine_Similarity', ascending=False)   
+    df_cos_sim = df_filtered.withColumn('Cosine_Similarity', cos_sim_udf(df_filtered['Encoding'])).drop(df_filtered['keys']).drop(df_filtered['Keywords_count']) \
+        .orderBy('Cosine_Similarity', ascending=False)  
     df_cos_sim.show()
     results = df_cos_sim.drop('Encoding').toJSON().take(10)
     print(results)
