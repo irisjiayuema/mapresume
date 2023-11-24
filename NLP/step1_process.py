@@ -16,11 +16,6 @@ from pyspark.sql.types import ArrayType, IntegerType, FloatType, StringType
 from pyspark.sql.functions import ltrim, rtrim, trim, regexp_replace
 from pyspark.sql.functions import udf
 
-# from pyspark.ml.feature import StopWordsRemover
-# import nltk
-# nltk.download('stopwords')
-# from nltk.corpus import stopwords
-
 max_len = 512
 
 #Define keyphrase extraction pipeline
