@@ -26,5 +26,5 @@ On your Terminal or Console
 4. npm install -g @vue/cli
 5. vue create my-vue-app (mapresume-app already created)
 6. cd mapresume-app
-7. npm run server
+7. npm run serve
 8. http://localhost:8080/
