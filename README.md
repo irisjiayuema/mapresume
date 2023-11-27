@@ -21,7 +21,7 @@ To run VUE on localhost
 
 On your Terminal or Console
 1. cd to project folder
-2. pip install npm
+2. install node.js installer in Window
 3. npm install -g @vue/cli
 4. vue create my-vue-app (mapresume-app already created)
 5. cd mapresume-app
