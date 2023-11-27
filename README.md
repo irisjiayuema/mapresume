@@ -5,8 +5,12 @@ To run Django on localhost
 
 On your Terminal or Console
 1. run cmd: pip install django
-2. change directory to "...\big-data-lab-I-final\Django"
-3. run cmd: python manage.py runserver
+2. pip install django-cors-headers
+3. pip install PyPDF2
+4. pip install sshtunnel
+5. pip install transformers
+6. change directory to "...\big-data-lab-I-final\Django"
+7. run cmd: python manage.py runserver
 this should start the Django server, you can check by visiting http://127.0.0.1:8000/
 
 Some tips for Django
@@ -20,6 +24,5 @@ On your Terminal or Console
 2. npm install -g @vue/cli
 3. vue create my-vue-app (mapresume-app already created)
 4. cd mapresume-app
-5. pip install djiango-cors-headers
-6. npm run serve
-7. http://localhost:8080/
+5. npm run serve
+6. http://localhost:8080/
