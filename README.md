@@ -21,10 +21,12 @@ To run VUE on localhost
 
 On your Terminal or Console
 1. cd to project folder
-2. pip install axios
-3. install node.js installer in Window
-4. npm install -g @vue/cli
-5. vue create my-vue-app (mapresume-app already created)
-6. cd mapresume-app
-7. npm run serve
-8. http://localhost:8080/
+2. In window OS: pip install axios
+   In Mac OS: npm install axios --save
+4. In window OS: install node.js installer
+   In Mac OS: brew install node
+6. npm install -g @vue/cli
+7. vue create my-vue-app (mapresume-app already created)
+8. cd mapresume-app
+9. npm run serve
+10. http://localhost:8080/
