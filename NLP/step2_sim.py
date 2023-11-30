@@ -15,7 +15,7 @@ def encode(text):
     enc = [x.item() for x in list(tokenizer.encode(text))]
     return enc
 
-# get the cosine similarity between encodings
+# get the similarity between encodings
 def sim(job, res=False):
     A = np.array(job)
     B = np.array(resume_enc)
@@ -31,9 +31,9 @@ def main(inputs):
     df_encoding = spark.read.json(inputs)
     df_filtered = df_encoding
 
-    # add the cosine similarity to the resume as a column
-    cos_sim_udf = udf(sim, FloatType())
-    df_sim = df_filtered.withColumn('Similarity', cos_sim_udf(df_filtered['Encoding'])).orderBy('Similarity', ascending=False)
+    # add the similarity to the resume as a column
+    sim_udf = udf(sim, FloatType())
+    df_sim = df_filtered.withColumn('Similarity', sim_udf(df_filtered['Encoding'])).orderBy('Similarity', ascending=False)
         
     df_sim.show()
 
