@@ -2,11 +2,11 @@ import os
 import sys
 assert sys.version_info >= (3, 5) # make sure we have Python 3.5+
 
-from transformers import AutoTokenizer
+from sentence_transformers import SentenceTransformer
 import numpy as np
 from pyspark.sql import SparkSession
 
-from pyspark.sql.types import ArrayType, IntegerType
+from pyspark.sql.types import ArrayType, FloatType
 from pyspark.sql.functions import ltrim, rtrim, regexp_replace
 from pyspark.sql.functions import udf
 
@@ -15,12 +15,12 @@ max_len = 512
 
 # this function encodes the given text using the AutoTokenizer and truncates/pads as necessary
 def encode(text):
-    enc = tokenizer.encode(text)
-    len_enc = len(enc)
-    if len_enc < max_len:
-        enc += [0] * (max_len - len_enc)
-    if len_enc > max_len:
-        enc = enc[:max_len]
+    enc = [x.item() for x in list(tokenizer.encode(text))]
+    # len_enc = len(enc)
+    # if len_enc < max_len:
+    #     enc += [0] * (max_len - len_enc)
+    # if len_enc > max_len:
+    #     enc = enc[:max_len]
     return enc
 
 
@@ -42,7 +42,7 @@ def main(inputs):
         )
     
     # apply the encoding
-    tokenize_udf = udf(encode, ArrayType(IntegerType()))
+    tokenize_udf = udf(encode, ArrayType(FloatType()))
     df_encoding = df_cleaned.withColumn('Encoding', tokenize_udf(df_cleaned['Job_Description']))
     
     # check the encoding by outputting to standard output
@@ -59,8 +59,8 @@ if __name__ == '__main__':
     spark.sparkContext.setLogLevel('WARN')
 
     inputs = 'Glassdoor_test_clean.json'
-    output = 'tokenized_data'
+    output = 'tokenized_data_dot'
 
-    tokenizer = AutoTokenizer.from_pretrained("sentence-transformers/all-MiniLM-L6-v2")
+    tokenizer = SentenceTransformer("msmarco-distilbert-dot-v5")
 
     main(inputs)
