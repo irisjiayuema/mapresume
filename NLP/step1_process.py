@@ -10,17 +10,9 @@ from pyspark.sql.types import ArrayType, FloatType
 from pyspark.sql.functions import ltrim, rtrim, regexp_replace
 from pyspark.sql.functions import udf
 
-# this is the value of the model's maximum number of tokens
-max_len = 512
-
 # this function encodes the given text using the AutoTokenizer and truncates/pads as necessary
 def encode(text):
     enc = [x.item() for x in list(tokenizer.encode(text))]
-    # len_enc = len(enc)
-    # if len_enc < max_len:
-    #     enc += [0] * (max_len - len_enc)
-    # if len_enc > max_len:
-    #     enc = enc[:max_len]
     return enc
 
 

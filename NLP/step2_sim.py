@@ -29,7 +29,6 @@ def main(inputs):
 
     # read the json
     df_encoding = spark.read.json(inputs)
-    df_encoding.show()
     df_filtered = df_encoding
 
     # add the cosine similarity to the resume as a column
