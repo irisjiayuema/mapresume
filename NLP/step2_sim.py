@@ -58,7 +58,7 @@ def main(inputs):
 
     # read the json
     df_encoding = spark.read.json(inputs)
-
+    df_encoding.show()
     # filter to only job descriptions with key words
     df_keywords = df_encoding.withColumn('keys', regexp_replace(df_encoding['Job_Description'], resume_keywords, '~~~'))
     df_keys = df_keywords.withColumn('Keywords_count', size(split(df_keywords['keys'], r"~~~")) - 1)

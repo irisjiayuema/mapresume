@@ -42,8 +42,8 @@ def main(inputs):
         )
     
     # apply the encoding
-    tokenize_dbert_udf = udf(encode, ArrayType(IntegerType()))
-    df_encoding = df_cleaned.withColumn('Encoding', tokenize_dbert_udf(df_cleaned['Job_Description']))
+    tokenize_udf = udf(encode, ArrayType(IntegerType()))
+    df_encoding = df_cleaned.withColumn('Encoding', tokenize_udf(df_cleaned['Job_Description']))
     
     # check the encoding by outputting to standard output
     df_encoding.show()
