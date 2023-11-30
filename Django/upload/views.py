@@ -23,19 +23,31 @@ class ResumeSummarizer:
         summary = self.tokenizer.decode(outputs[0], skip_special_tokens=True)
         return summary
 
+def read_text_file(file_path):
+    with open(file_path, 'r', encoding='utf-8') as file:
+        content = file.read()
+    return content
+
+
 def extract_and_summarize(pdf):
     text = extract_text_from_pdf(pdf)
-    summarizer = ResumeSummarizer()
-    summary = summarizer.summarize(text)
-    print("Summary:", summary)
+    print(text)
+    # file_path = '/Users/yanzhiyao/Downloads/big-data-lab-I-final/Django/upload/tan.txt'
+    # text = read_text_file(file_path)
+    # print(text)
+    # summarizer = ResumeSummarizer()
+    # summary = summarizer.summarize(text)
+    return text
 
 
 def extract_text_from_pdf(pdf_path):
     reader = PyPDF2.PdfReader(pdf_path)
     text = ""
     for page in reader.pages:
-        text += page.extract_text()
-    return text
+        page_text = page.extract_text()
+        if page_text:  # Ensure there is text on the page
+            text += page_text + " "  # Add a space after each page's text
+    return text.strip()  # Remove any leading or trailing whitespace
 
 def execute_spark(input_string):
     cmd = (f"bash -lc '/opt/bin/spark-submit /home/cwa260/big-data-lab-I-final/NLP/step2_sim.py \'{input_string}\' '")
@@ -91,7 +103,7 @@ def match_jobs(request):
                 # You can use resume to match jobs
                 
                 input_string = extract_and_summarize(pdf_file)
-                print(input_string)
+                #print(input_string)
                 stdin_str, stderr_str = execute_spark(input_string)
                 index = stdin_str.find("['{")
                 stdin_str = stdin_str[index:]
@@ -108,5 +120,6 @@ def match_jobs(request):
                 
                 # Return the combined data as a JsonResponse
                 return JsonResponse(combined_data)
+                
     else:
         return HttpResponse('Method not allowed', status=405)
