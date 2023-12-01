@@ -5,7 +5,7 @@ assert sys.version_info >= (3, 5) # make sure we have Python 3.5+
 from sentence_transformers import SentenceTransformer
 import numpy as np
 from pyspark.sql import SparkSession
-
+import subprocess
 from pyspark.sql.types import ArrayType, FloatType
 from pyspark.sql.functions import ltrim, rtrim, regexp_replace
 from pyspark.sql.functions import udf
@@ -56,3 +56,5 @@ if __name__ == '__main__':
     tokenizer = SentenceTransformer("msmarco-distilbert-dot-v5")
 
     main(inputs)
+    result = subprocess.run('hdfs dfs -copyFromLocal tokenized_data_dot tokenized_data_dot', shell=True, stdout=subprocess.PIPE, text=True)
+    print(result.stdout)
