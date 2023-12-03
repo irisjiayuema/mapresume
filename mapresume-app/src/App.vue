@@ -24,9 +24,8 @@
           <h3><strong>Company:</strong> {{ currentJob.Company }}</h3>
           <p><strong>Job Title:</strong> {{ currentJob.jobTitle }}</p>
           <p><strong>Location:</strong> {{ currentJob.location }}</p>
-          <p><strong>Validate:</strong> {{ currentJob.validate }}</p>
           <p><strong>Job Description:</strong> {{ currentJob.JobDescription }}</p>
-          <p><strong>Cosine Similarity:</strong> {{ currentJob.cosineSimilarity }}</p>
+          <p><strong>Similarity:</strong> {{ currentJob.cosineSimilarity }}</p>
           <a :href="currentJob.link" target="_blank">Job Link</a>
         </div>
 
@@ -90,7 +89,7 @@ export default {
           clearInterval(interval);
           //this.isProcessing = false;
         }
-      }, 800); // 800ms interval for a total duration of 80 seconds
+      }, 600); // 600ms interval for a total duration of 80 seconds
     },
     processMatchData(data) {
       return Object.values(data).map(item => ({
@@ -100,7 +99,7 @@ export default {
         link: item.Link,
         location: item.Location,
         validate: item.Validate,
-        cosineSimilarity: item.Cosine_Similarity.toFixed(2)
+        cosineSimilarity: item.Similarity.toFixed(2)
       }));
     },
     matchResume() {
