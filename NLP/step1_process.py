@@ -56,3 +56,5 @@ if __name__ == '__main__':
     tokenizer = SentenceTransformer("msmarco-distilbert-dot-v5")
 
     main(inputs)
+    result = subprocess.run('hdfs dfs -copyFromLocal tokenized_data_dot tokenized_data_dot', shell=True, stdout=subprocess.PIPE, text=True)
+    print(result.stdout)
