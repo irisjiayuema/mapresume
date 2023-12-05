@@ -10,7 +10,7 @@ from pyspark.sql import SparkSession
 from pyspark.sql.types import FloatType
 from pyspark.sql.functions import udf
 
-# this function encodes the given text using the AutoTokenizer and truncates/pads as necessary
+# this function encodes the given text using the sentence transformer and truncates/pads as necessary
 def encode(text):
     enc = [x.item() for x in list(tokenizer.encode(text))]
     return enc
@@ -50,7 +50,7 @@ if __name__ == '__main__':
     # get the processed data
     inputs = 'tokenized_data_dot'
 
-    # set the models
+    # set the model
     tokenizer = SentenceTransformer("msmarco-distilbert-dot-v5")
 
     # extract keywords from the resume and encode
