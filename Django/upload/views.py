@@ -31,7 +31,7 @@ def read_text_file(file_path):
 
 def extract_and_summarize(pdf):
     text = extract_text_from_pdf(pdf)
-    print(text)
+    # print(text)
     # file_path = '/Users/yanzhiyao/Downloads/big-data-lab-I-final/Django/upload/tan.txt'
     # text = read_text_file(file_path)
     # print(text)
@@ -50,7 +50,7 @@ def extract_text_from_pdf(pdf_path):
     return text.strip()  # Remove any leading or trailing whitespace
 
 def execute_spark(input_string):
-    cmd = (f"bash -lc '/opt/bin/spark-submit /home/cwa260/big-data-lab-I-final/NLP/step2_sim.py \'{input_string}\' '")
+    cmd = (f"bash -lc '/opt/bin/spark-submit /home/cwa260/big-data-lab-I-final/NLP/step2_sim.py \"{input_string}\" '")
     remote_server_ip = 'cluster.cs.sfu.ca'
     ssh_username = 'cwa260'
     ssh_password = 'Qwer19951029'
@@ -103,7 +103,8 @@ def match_jobs(request):
                 # You can use resume to match jobs
                 
                 input_string = extract_and_summarize(pdf_file)
-                #print(input_string)
+                print(input_string)
+
                 stdin_str, stderr_str = execute_spark(input_string)
                 index = stdin_str.find("['{")
                 stdin_str = stdin_str[index:]
