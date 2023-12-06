@@ -1,32 +1,19 @@
 # big-data-lab-I-final
-CMPT 732 Final
+## CMPT 732 Final
 
-To run Django on localhost
+**MapResume** - an online application that accepts a resume and returns jobs that most closely match your profile. Your worry-free Co-op & job hunting helper.
 
-On your Terminal or Console
-1. run cmd: pip install django
-2. pip install django-cors-headers
-3. pip install PyPDF2
-4. pip install sshtunnel
-5. pip install transformers
-6. change directory to "...\big-data-lab-I-final\Django"
-7. run cmd: python manage.py runserver
-this should start the Django server, you can check by visiting http://127.0.0.1:8000/
+### Notes:
 
-Some tips for Django
-1. Since Django is a backend server, you can use postman to simulate user request
-2. For Core logic and Resume Parsing, you only need to modify this file D:\GitHubRepo\big-data-lab-I-final\Django\upload\views.py
+- The `step1_process.py` is for encoding the job descriptions. This process can be relatively slow, and it is only performed when the dataset is updated, then the data is saved for later use. **So to save your time and ensure you have an enjoyable testing experience, please skip this step if you want to.**
 
-To run VUE on localhost
 
-On your Terminal or Console
-1. cd to project folder
-2. In window OS: pip install axios <br>
-   In Mac OS: npm install axios --save
-4. In window OS: install node.js installer <br>
-   In Mac OS: brew install node
-6. npm install -g @vue/cli
-7. vue create my-vue-app (mapresume-app already created)
-8. cd mapresume-app
-9. npm run serve
-10. http://localhost:8080/
+### Project Summary:
+- Getting the Data: 3
+- ETL: 3
+- Problem Definition: 2
+- Algorithmic Work: 3
+- Bigness/Parallelization: 3
+- UI (User Interface): 3
+- Visualization: 0
+- Technologies: 3
