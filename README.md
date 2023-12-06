@@ -5,7 +5,7 @@
 
 ### Notes:
 
-- The `step1_process.py` is for encoding the job descriptions. This process can be relatively slow, **So skip this step as we’ve already run and saved for the existing data.**
+- The `step1_process.py` is for encoding the job descriptions. This process can be relatively slow, **so skip this step as we’ve already run and saved for the existing data.**
 
 
 ### Project Summary:
