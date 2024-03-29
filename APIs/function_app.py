@@ -70,7 +70,7 @@ def sql_query_demo(req: func.HttpRequest) -> func.HttpResponse:
             input_string = extract_text_from_pdf(pdf_file)
             
         out = run_spark_submit_via_ssh(input_string)
-        return func.HttpResponse(f"output:, {out}", status_code=200)
+        return func.HttpResponse(out, status_code=200)
     except Exception as e:
         error_message = str(e).encode('utf-8')
         return func.HttpResponse(f"exception happened!!!: {error_message}", status_code=500)
@@ -201,3 +201,70 @@ def jobs_average_salary(req: func.HttpRequest) -> func.HttpResponse:
         # Log and return any other error message
         logging.error(f'Error: {str(e)}')
         return func.HttpResponse(f"Error: {str(e)}", status_code=500)
+
+
+@app.route(route="correlation", auth_level=func.AuthLevel.ANONYMOUS)
+def correlation(req: func.HttpRequest) -> func.HttpResponse:
+    logging.info('Python HTTP trigger function processed a request.')
+    precalculated_correlation_dict = {
+        "views": {
+            "views": 1.0,
+            "applies": 0.899073,
+            "max_salary": 0.107155,
+            "company_size": -0.043818,
+            "company_follower_count": 0.03338
+        },
+        "applies": {
+            "views": 0.899073,
+            "applies": 1.0,
+            "max_salary": 0.042921,
+            "company_size": -0.076988,
+            "company_follower_count": -0.00704
+        },
+        "max_salary": {
+            "views": 0.107155,
+            "applies": 0.042921,
+            "max_salary": 1.0,
+            "company_size": 0.136946,
+            "company_follower_count": 0.231698
+        },
+        "company_size": {
+            "views": -0.043818,
+            "applies": -0.076988,
+            "max_salary": 0.136946,
+            "company_size": 1.0,
+            "company_follower_count": 0.277218
+        },
+        "company_follower_count": {
+            "views": 0.03338,
+            "applies": -0.00704,
+            "max_salary": 0.231698,
+            "company_size": 0.277218,
+            "company_follower_count": 1.0
+        }
+    }
+    try:
+        # precalculated_correlation_dict is defined and populated with your data
+        return func.HttpResponse(body=json.dumps(precalculated_correlation_dict), status_code=200, mimetype='application/json')
+
+    except Exception as e:
+        return func.HttpResponse("An error occurred: " + str(e), status_code=500)
+
+
+@app.route(route="scatter_plots", auth_level=func.AuthLevel.ANONYMOUS)
+def scatter_plots(req: func.HttpRequest) -> func.HttpResponse:
+    logging.info('Python HTTP trigger function processed a request.')
+    try:
+        # Define the path to the JSON file, relative to the current script location
+        file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'scatter_plots_data.json')
+        
+        # Open the JSON file and load its contents
+        with open(file_path, 'r') as json_file:
+            data = json.load(json_file)
+            
+        # Return the data as a JSON response
+        return func.HttpResponse(body=json.dumps(data), status_code=200, mimetype='application/json')
+
+    except Exception as e:
+        # Return an error message if something goes wrong
+        return func.HttpResponse("An error occurred: " + str(e), status_code=500)
