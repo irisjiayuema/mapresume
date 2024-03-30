@@ -1,0 +1,1 @@
+scp -i ../final_project.pem -r /Users/bs6/personalProjects/mapresume-frontend/build ubuntu@54.213.254.255:~

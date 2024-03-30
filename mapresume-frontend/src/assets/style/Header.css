@@ -1,0 +1,57 @@
+/* Navbar styles */
+.navbar {
+    background-color: #6495ED; /* Adjust to match your theme */
+    padding: 10px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60px
+  }
+  
+  .nav-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+  }
+  
+  .nav-link {
+    display: flex;
+    padding: 8px 25px;
+    text-decoration: none;
+    color: white;
+    transition: background-color 0.3s ease;
+    flex-direction: column; /* Stack icon and text vertically */
+    align-items: center; /* Center-align the content horizontally */
+    border-radius: 15px;
+  }
+  
+  .nav-link:hover {
+    background-color: #0069d9;
+    border-radius: 15px;
+  }
+
+  .logo {
+    max-height: 100%; 
+    max-width: 100%; 
+    height: auto;
+    width: auto;
+  }
+  
+  .nav-link .fa-house,.nav-link .fa-file,.nav-link .fa-chart-simple,.nav-link .fa-circle-info{
+    margin-bottom: 5px; 
+  }
+  .nav-link svg {
+    width: 20px; /* 固定宽度 */
+    height: 20px; /* 固定高度 */
+  }
+  
+  
+  .nav-link span {
+    display: block;
+    text-align: center;
+    font-size: 0.8em;
+  }
+  
+
+  
