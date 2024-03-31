@@ -86,7 +86,7 @@ def job_count(req: func.HttpRequest) -> func.HttpResponse:
         formatted_experience_level = req.params.get('formatted_experience_level')
 
         # Start with the base query
-        query = "SELECT state_abbr, COUNT(*) AS JobCount FROM jobs_all"
+        query = "SELECT state_abbr, COUNT(*) AS JobCount FROM jobs_all_filtered"
         conditions = []
         params = []
 
@@ -151,7 +151,7 @@ def jobs_average_salary(req: func.HttpRequest) -> func.HttpResponse:
         experience_level = req.params.get('formatted_experience_level')
 
         # Start with the base query
-        query = "SELECT state_abbr, AVG(med_salary) AS AverageSalary FROM jobs_all"
+        query = "SELECT state_abbr, AVG(med_salary) AS AverageSalary FROM jobs_all_filtered"
         conditions = []
         params = []
 
