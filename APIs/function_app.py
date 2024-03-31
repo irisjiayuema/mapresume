@@ -58,7 +58,7 @@ def extract_text_from_pdf(pdf_path):
     return text.strip()  # Remove any leading or trailing whitespace
 
 app = func.FunctionApp(http_auth_level=func.AuthLevel.ANONYMOUS)
-@app.route(route="step2", methods=['GET'])
+@app.route(route="step2", methods=['POST'])
 def sql_query_demo(req: func.HttpRequest) -> func.HttpResponse:
     logging.info('Python HTTP trigger function processed a request.')
     try:
@@ -86,7 +86,7 @@ def job_count(req: func.HttpRequest) -> func.HttpResponse:
         formatted_experience_level = req.params.get('formatted_experience_level')
 
         # Start with the base query
-        query = "SELECT location, COUNT(*) AS JobCount FROM jobs_all"
+        query = "SELECT state_abbr, COUNT(*) AS JobCount FROM jobs_all"
         conditions = []
         params = []
 
@@ -106,7 +106,7 @@ def job_count(req: func.HttpRequest) -> func.HttpResponse:
             query += " WHERE " + " AND ".join(conditions)
         
         # Add the GROUP BY and ORDER BY clauses
-        query += " GROUP BY location ORDER BY JobCount DESC;"
+        query += " GROUP BY state_abbr ORDER BY JobCount DESC;"
 
         # Assuming 'server', 'username', 'password', and 'database' are defined elsewhere
         cnxn = pymssql.connect(server=server, user=username, password=password, database=database)
@@ -117,7 +117,7 @@ def job_count(req: func.HttpRequest) -> func.HttpResponse:
 
         # Fetch data
         rows = cursor.fetchall()
-        data = [{"name": row["location"], "value": row["JobCount"]} for row in rows]
+        data = [{"name": row["state_abbr"], "value": row["JobCount"]} for row in rows]
 
         # Close the connection
         cursor.close()
@@ -151,7 +151,7 @@ def jobs_average_salary(req: func.HttpRequest) -> func.HttpResponse:
         experience_level = req.params.get('formatted_experience_level')
 
         # Start with the base query
-        query = "SELECT location, AVG(med_salary) AS AverageSalary FROM jobs_all"
+        query = "SELECT state_abbr, AVG(med_salary) AS AverageSalary FROM jobs_all"
         conditions = []
         params = []
 
@@ -170,7 +170,7 @@ def jobs_average_salary(req: func.HttpRequest) -> func.HttpResponse:
         if conditions:
             query += " WHERE " + " AND ".join(conditions)
 
-        query += " GROUP BY location ORDER BY AverageSalary DESC;"
+        query += " GROUP BY state_abbr ORDER BY AverageSalary DESC;"
         
         # Assuming 'server', 'username', 'password', and 'database' are defined elsewhere
         cnxn = pymssql.connect(server=server, user=username, password=password, database=database)
@@ -181,7 +181,7 @@ def jobs_average_salary(req: func.HttpRequest) -> func.HttpResponse:
 
         # Fetch data
         rows = cursor.fetchall()
-        data = [{"name": row["location"], "value": row["AverageSalary"]} for row in rows]
+        data = [{"name": row["state_abbr"], "value": row["AverageSalary"]} for row in rows]
 
         # Close the connection
         cursor.close()
