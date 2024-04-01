@@ -44,6 +44,8 @@ function Match() {
     setFile(event.target.files[0]);
   };
 
+
+
   const matchResume = async () => {
     if (!file) {
       setResponseMessage('Please upload a file');
@@ -82,7 +84,6 @@ function Match() {
     
   };
 
-
   const navigateJob = (direction) => {
     let newIndex = currentIndex;
     if (direction === 'previous') {
@@ -99,6 +100,11 @@ function Match() {
       setIsChartVisible(true);
     }
   }, [matchData]);
+
+  useEffect(() => {
+    setResponseMessage('');
+  }, [file]);
+
 
   useEffect(() => {
 
@@ -275,7 +281,7 @@ function Match() {
     });
     
     function handleHover(dataItem) {
-      if (dataItem && currentlyHovered != dataItem) {
+      if (dataItem && currentlyHovered !== dataItem) {
         handleOut();
         currentlyHovered = dataItem;
         var bullet = dataItem.bullets[0];
@@ -300,11 +306,11 @@ function Match() {
       }
     }
     
-    var circleTemplate = am5.Template.new({});
+    let circleTemplate = am5.Template.new({});
     
     series.bullets.push(function (colRoot, series, dataItem) {
-      var bulletContainer = am5.Container.new(colRoot, {});
-      var circle = bulletContainer.children.push(
+      let bulletContainer = am5.Container.new(colRoot, {});
+      let circle = bulletContainer.children.push(
         am5.Circle.new(
           colRoot,
           {
@@ -314,18 +320,18 @@ function Match() {
         )
       );
     
-      var maskCircle = bulletContainer.children.push(
+      let maskCircle = bulletContainer.children.push(
         am5.Circle.new(colRoot, { radius: 27 })
       );
     
       // only containers can be masked, so we add image to another container
-      var imageContainer = bulletContainer.children.push(
+      let imageContainer = bulletContainer.children.push(
         am5.Container.new(colRoot, {
           mask: maskCircle
         })
       );
     
-      var image = imageContainer.children.push(
+      imageContainer.children.push(
         am5.Picture.new(colRoot, {
           templateField: "pictureSettings",
           centerX: am5.p50,
