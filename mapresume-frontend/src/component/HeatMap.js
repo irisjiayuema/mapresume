@@ -7,6 +7,7 @@ import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
 export default function HeatMap() {
     useEffect(() => {
         var root = am5.Root.new("chartdiv");
+
         root.setThemes([
             am5themes_Animated.new(root)
         ]);
@@ -133,228 +134,55 @@ export default function HeatMap() {
             verygood: am5.color(0x0b7d03)
         };
         
-        // Set data
-        // https://www.amcharts.com/docs/v5/charts/xy-chart/#Setting_data
-        var data = [
-            {
-            y: "Views",
-            x: "Company Followers",
-            columnSettings: {
-                fill: colors.medium
-            },
-            value: 20
-            },
-            {
-            y: "Applies",
-            x: "Company Followers",
-            columnSettings: {
-                fill: colors.good
-            },
-            value: 15
-            },
-            {
-            y: "Max Salary",
-            x: "Company Followers",
-            columnSettings: {
-                fill: colors.verygood
-            },
-            value: 25
-            },
-            {
-            y: "Company Size",
-            x: "Company Followers",
-            columnSettings: {
-                fill: colors.verygood
-            },
-            value: 15
-            },
-            {
-            y: "Company Followers",
-            x: "Company Followers",
-            columnSettings: {
-                fill: colors.verygood
-            },
-            value: 12
-            },
-            {
-            y: "Views",
-            x: "Company Size",
-            columnSettings: {
-                fill: colors.bad
-            },
-            value: 30
-            },
-            {
-            y: "Applies",
-            x: "Company Size",
-            columnSettings: {
-                fill: colors.medium
-            },
-            value: 24
-            },
-            {
-            y: "Max Salary",
-            x: "Company Size",
-            columnSettings: {
-                fill: colors.good
-            },
-            value: 25
-            },
-            {
-            y: "Company Size",
-            x: "Company Size",
-            columnSettings: {
-                fill: colors.verygood
-            },
-            value: 15
-            },
-            {
-            y: "Company Followers",
-            x: "Company Size",
-            columnSettings: {
-                fill: colors.verygood
-            },
-            value: 25
-            },
-            {
-            y: "Views",
-            x: "Max Salary",
-            columnSettings: {
-                fill: colors.bad
-            },
-            value: 33
-            },
-            {
-            y: "Applies",
-            x: "Max Salary",
-            columnSettings: {
-                fill: colors.bad
-            },
-            value: 14
-            },
-            {
-            y: "Max Salary",
-            x: "Max Salary",
-            columnSettings: {
-                fill: colors.medium
-            },
-            value: 20
-            },
-            {
-            y: "Company Size",
-            x: "Max Salary",
-            columnSettings: {
-                fill: colors.good
-            },
-            value: 19
-            },
-            {
-            y: "Company Followers",
-            x: "Max Salary",
-            columnSettings: {
-                fill: colors.good
-            },
-            value: 25
-            },
-            {
-            y: "Views",
-            x: "Applies",
-            columnSettings: {
-                fill: colors.critical
-            },
-            value: 31
-            },
-            {
-            y: "Applies",
-            x: "Applies",
-            columnSettings: {
-                fill: colors.critical
-            },
-            value: 24
-            },
-            {
-            y: "Max Salary",
-            x: "Applies",
-            columnSettings: {
-                fill: colors.bad
-            },
-            value: 25
-            },
-            {
-            y: "Company Size",
-            x: "Applies",
-            columnSettings: {
-                fill: colors.medium
-            },
-            value: 15
-            },
-            {
-            y: "Company Followers",
-            x: "Applies",
-            columnSettings: {
-                fill: colors.good
-            },
-            value: 15
-            },
-            {
-            y: "Views",
-            x: "Views",
-            columnSettings: {
-                fill: colors.critical
-            },
-            value: 12
-            },
-            {
-            y: "Applies",
-            x: "Views",
-            columnSettings: {
-                fill: colors.critical
-            },
-            value: 14
-            },
-            {
-            y: "Max Salary",
-            x: "Views",
-            columnSettings: {
-                fill: colors.critical
-            },
-            value: 15
-            },
-            {
-            y: "Company Size",
-            x: "Views",
-            columnSettings: {
-                fill: colors.bad
-            },
-            value: 25
-            },
-            {
-            y: "Company Followers",
-            x: "Views",
-            columnSettings: {
-                fill: colors.medium
-            },
-            value: 19
-            }
-        ];
-        
-        series.data.setAll(data);
-        
-        yAxis.data.setAll([
-            { category: "Views" },
-            { category: "Applies" },
-            { category: "Max Salary" },
-            { category: "Company Size" },
-            { category: "Company Followers" }
-        ]);
-        
-        xAxis.data.setAll([
-            { category: "Views" },
-            { category: "Applies" },
-            { category: "Max Salary" },
-            { category: "Company Size" },
-            { category: "Company Followers" }
-        ]);
+         // Fetch and update data
+        fetch('https://cmpt733functionapp1.azurewebsites.net/api/correlation')
+        .then(response => response.json())
+        .then(data => {
+            var processedData = [];
+            Object.keys(data).forEach(yCategory => {
+            Object.keys(data[yCategory]).forEach(xCategory => {
+                processedData.push({
+                y: yCategory,
+                x: xCategory,
+                columnSettings: {
+                    fill: determineColor(data[yCategory][xCategory])
+                },
+                value: parseFloat(data[yCategory][xCategory].toFixed(2))
+                });
+            });
+            });
+
+            series.data.setAll(processedData);
+
+            yAxis.data.setAll([
+            { category: "views" },
+            { category: "applies" },
+            { category: "max_salary" },
+            { category: "company_size" },
+            { category: "company_follower_count" }
+            ]);
+
+            xAxis.data.setAll([
+            { category: "company_follower_count" },
+            { category: "company_size" },
+            { category: "max_salary" },
+            { category: "applies" },
+            { category: "views" }
+            ]);
+
+            chart.appear(1000, 100);
+        })
+        .catch(error => console.error('Error fetching data:', error));
+
+        // Utility function to determine color based on value
+        function determineColor(value) {
+        if (value > 0.5) return colors.verygood;
+        if (value > 0.2) return colors.good;
+        if (value > 0) return colors.medium;
+        if (value > -0.2) return colors.bad;
+        return colors.critical;
+        }
+
     },[]);
     return (
         <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "" }}>

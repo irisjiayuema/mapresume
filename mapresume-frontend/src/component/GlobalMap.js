@@ -234,149 +234,186 @@ const GlobalMap = () => {
         });
       });
 
-
-      var cities = [
-          {
-            id: "london",
-            title: "London",
-            geometry: { type: "Point", coordinates: [-0.1262, 51.5002] }
-          },
-          {
-            id: "beijing",
-            title: "Beijing",
-            geometry: { type: "Point", coordinates: [116.4074, 39.9042] }
-          },
-          {
-            id: "dubai",
-            title: "Dubai",
-            geometry: { type: "Point", coordinates: [55.2708, 25.2048] }
-          },
-          {
-            id: "hong_kong",
-            title: "Hong Kong",
-            geometry: { type: "Point", coordinates: [114.1694, 22.3193] }
-          },
-          {
-            id: "paris",
-            title: "Paris",
-            geometry: { type: "Point", coordinates: [2.3510, 48.8567] }
-          },
-          {
-            id: "shanghai",
-            title: "Shanghai",
-            geometry: { type: "Point", coordinates: [121.4737, 31.2304] }
-          },
-          {
-            id: "singapore",
-            title: "Singapore",
-            geometry: { type: "Point", coordinates: [103.8198, 1.3521] }
-          },
-          {
-            id: "tokyo",
-            title: "Tokyo",
-            geometry: { type: "Point", coordinates: [139.6503, 35.6762] }
-          },
-          {
-            id: "sydney",
-            title: "Sydney",
-            geometry: { type: "Point", coordinates: [151.2093, -33.8688] }
-          },
-          {
-            id: "toronto",
-            title: "Toronto",
-            geometry: { type: "Point", coordinates: [-79.3832, 43.6532] }
-          },
-          {
-            id: "mumbai",
-            title: "Mumbai",
-            geometry: { type: "Point", coordinates: [72.8777, 19.0760] }
-          },
-          {
-            id: "amsterdam",
-            title: "Amsterdam",
-            geometry: { type: "Point", coordinates: [4.9041, 52.3676] }
-          },
-          {
-            id: "milan",
-            title: "Milan",
-            geometry: { type: "Point", coordinates: [9.1900, 45.4642] }
-          },
-          {
-            id: "frankfurt",
-            title: "Frankfurt",
-            geometry: { type: "Point", coordinates: [8.6821, 50.1109] }
-          },
-          {
-            id: "mexico_city",
-            title: "Mexico City",
-            geometry: { type: "Point", coordinates: [-99.1332, 19.4326] }
-          },
-          {
-            id: "sao_paulo",
-            title: "Sao Paulo",
-            geometry: { type: "Point", coordinates: [-46.6333, -23.5505] }
-          },
-          {
-            id: "kuala_lumpur",
-            title: "Kuala Lumpur",
-            geometry: { type: "Point", coordinates: [101.6869, 3.1390] }
-          },
-          {
-            id: "madrid",
-            title: "Madrid",
-            geometry: { type: "Point", coordinates: [-3.7033, 40.4167] }
-          },
-          
-          {
-            id: "new york",
-            title: "New York",
-            geometry: { type: "Point", coordinates: [-74, 40.43] }
-          }
-        ];
-
-      citySeries.data.setAll(cities);
-
-      // Prepare line series data
-      var destinations = ["beijing", "dubai", "hong_kong", "paris", "shanghai", "singapore", "tokyo", "sydney", "toronto", "mumbai", "amsterdam", "milan", "frankfurt", "mexico_city", "sao_paulo", "kuala_lumpur", "madrid"];
+      const contries = [
+        {
+          id: "united_kingdom",
+          title: "United Kingdom",
+          geometry: { type: "Point", coordinates: [-3.435973, 55.378051] }
+        },
+        {
+          id: "canada",
+          title: "Canada",
+          geometry: { type: "Point", coordinates: [-106.346771, 56.130366] }
+        },
+        {
+          id: "switzerland",
+          title: "Switzerland",
+          geometry: { type: "Point", coordinates: [8.227512, 46.818188] }
+        },
+        {
+          id: "germany",
+          title: "Germany",
+          geometry: { type: "Point", coordinates: [10.451526, 51.165691] }
+        },
+        {
+          id: "france",
+          title: "France",
+          geometry: { type: "Point", coordinates: [2.213749, 46.227638] }
+        },
+        {
+          id: "india",
+          title: "India",
+          geometry: { type: "Point", coordinates: [78.96288, 20.593684] }
+        },
+        {
+          id: "australia",
+          title: "Australia",
+          geometry: { type: "Point", coordinates: [133.775136, -25.274398] }
+        },
+        {
+          id: "netherlands",
+          title: "Netherlands",
+          geometry: { type: "Point", coordinates: [5.291266, 52.132633] }
+        },
+        {
+          id: "sweden",
+          title: "Sweden",
+          geometry: { type: "Point", coordinates: [18.643501, 60.128161] }
+        },
+        {
+          id: "japan",
+          title: "Japan",
+          geometry: { type: "Point", coordinates: [138.252924, 36.204824] }
+        }
       
-      //-74, 40.43
-      // NY coordinates
-      var originLongitude = -74;
-      var originLatitude = 40.43;
+      ];
 
-      var newyorkDataItem = citySeries.getDataItemById("new york");
+      const states = [
+        {
+          id: "california",
+          title: "California",
+          geometry: { type: "Point", coordinates: [-119.417932, 36.778261] }
+        },
+        {
+          id: "new_york",
+          title: "New York",
+          geometry: { type: "Point", coordinates: [-74.005973, 40.712775] }
+        },
+        {
+          id: "texas",
+          title: "Texas",
+          geometry: { type: "Point", coordinates: [-99.901813, 31.968599] }
+        },
+        {
+          id: "wisconsin",
+          title: "Wisconsin",
+          geometry: { type: "Point", coordinates: [-89.398528, 43.78444] }
+        },
+        {
+          id: "georgia",
+          title: "Georgia",
+          geometry: { type: "Point", coordinates: [-82.907123, 32.165622] }
+        },
+        {
+          id: "pennsylvania",
+          title: "Pennsylvania",
+          geometry: { type: "Point", coordinates: [-77.194525, 41.203322] }
+        },
+        {
+          id: "colorado",
+          title: "Colorado",
+          geometry: { type: "Point", coordinates: [-105.782067, 39.550051] }
+        },
+        {
+          id: "washington",
+          title: "Washington",
+          geometry: { type: "Point", coordinates: [-120.740139, 47.751074] }
+        },
+        {
+          id: "florida",
+          title: "Florida",
+          geometry: { type: "Point", coordinates: [-81.515754, 27.664827] }
+        },
+        {
+          id: "new_jersey",
+          title: "New Jersey",
+          geometry: { type: "Point", coordinates: [-74.405661, 40.058324] }
+        },
+        {
+          id: "maryland",
+          title: "Maryland",
+          geometry: { type: "Point", coordinates: [-76.641271, 39.045755] }
+        },
+        {
+          id: "north_carolina",
+          title: "North Carolina",
+          geometry: { type: "Point", coordinates: [-79.0193, 35.759573] }
+        },
+        {
+          id: "illinois",
+          title: "Illinois",
+          geometry: { type: "Point", coordinates: [-89.398528, 40.633125] }
+        }
+      ]
+  
+
+      citySeries.data.setAll(contries.concat(states));
+
+      
+      // Prepare line series data
+      // let destinations = contries.map(item=>item.id);
+      let destMap = {
+        "united_kingdom": ["california","new_york","texas"],
+        "canada": ["california","new_york","wisconsin"],
+        "switzerland": ["california","new_york","georgia"],
+        "germany": ['new_york','california', 'pennsylvania'],
+        "france": ['new_york','california', 'colorado'],
+        "india": ['texas','washington', 'florida'],
+        "australia": ['california','new_york','new_jersey'],
+        "netherlands": ['california', 'new_york'],
+        "sweden": ['california', 'maryland','north_carolina'],
+        "japan": ['new_york','california', 'illinois']
+      };
+
+
       // this will do all the animations
-      am5.array.each(destinations, function(did) {
+      am5.array.each(Object.keys(destMap), function(did) {
+
         var destinationDataItem = citySeries.getDataItemById(did);
-        var lineDataItem = lineSeries.pushDataItem({});
-        lineDataItem.set("pointsToConnect", [destinationDataItem,newyorkDataItem])
 
-        var startDataItem = animatedBulletSeries.pushDataItem({});
-        startDataItem.setAll({
-          lineDataItem: lineDataItem,
-          positionOnLine: 0
-        });
-
-        var endDataItem = animatedBulletSeries.pushDataItem({});
-        endDataItem.setAll({
-          lineDataItem: lineDataItem,
-          positionOnLine: 1
-        });
-
-        var animatedLineDataItem = animatedLineSeries.pushDataItem({});
-        animatedLineDataItem.set("pointsToConnect", [endDataItem,startDataItem])
-
-        var lon0 = newyorkDataItem.get("longitude");
-        var lat0 = newyorkDataItem.get("latitude");
-
-        var lon1 = destinationDataItem.get("longitude");
-        var lat1 = destinationDataItem.get("latitude");
+        for(let i = 0; i < destMap[did].length; i++){
+          let originDataItem = citySeries.getDataItemById(destMap[did][i]);
+          let lineDataItem = lineSeries.pushDataItem({});
+          lineDataItem.set("pointsToConnect", [destinationDataItem,originDataItem])
+  
+          var startDataItem = animatedBulletSeries.pushDataItem({});
+          startDataItem.setAll({
+            lineDataItem: lineDataItem,
+            positionOnLine: 0
+          });
+  
+          var endDataItem = animatedBulletSeries.pushDataItem({});
+          endDataItem.setAll({
+            lineDataItem: lineDataItem,
+            positionOnLine: 1
+          });
+  
+          var animatedLineDataItem = animatedLineSeries.pushDataItem({});
+          animatedLineDataItem.set("pointsToConnect", [endDataItem,startDataItem])
+  
+          var lon0 = originDataItem.get("longitude");
+          var lat0 = originDataItem.get("latitude");
+  
+          var lon1 = destinationDataItem.get("longitude");
+          var lat1 = destinationDataItem.get("latitude");
+          
+  
+          var distance = Math.hypot(lon1 - lon0, lat1 - lat0);
+          var duration = distance * 100;
+  
+          animateStart(endDataItem,startDataItem,duration);
+        }
         
-
-        var distance = Math.hypot(lon1 - lon0, lat1 - lat0);
-        var duration = distance * 100;
-
-        animateStart(endDataItem,startDataItem,duration);
       });
 
       function animateStart(startDataItem, endDataItem, duration) {
