@@ -13,6 +13,7 @@ export default function ChartCards() {
     const navigate = useNavigate();
     const goHeatMap = ()=>{
         navigate('/charts/heatmap');
+
     }
     return (
         <div className='chart-container'>

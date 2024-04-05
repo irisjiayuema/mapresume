@@ -200,6 +200,9 @@ const GlobalMap = () => {
       var citySeries = chart.series.push(
         am5map.MapPointSeries.new(root, {})
       );
+      var stateSeries = chart.series.push(
+        am5map.MapPointSeries.new(root, {})
+      );
 
       // visible city circles
       citySeries.bullets.push(function() {
@@ -209,7 +212,24 @@ const GlobalMap = () => {
           tooltipText: "{title}",
           tooltipY: 0,
 
-          fill: am5.color(0xffba00),
+          fill: am5.color(0xc51b8a),
+          stroke: root.interfaceColors.get("background"),
+          strokeWidth: 2
+        });
+
+        return am5.Bullet.new(root, {
+          sprite: circle
+        });
+      });
+
+      stateSeries.bullets.push(function() {
+        
+        var circle = am5.Circle.new(root, {
+          radius: 5,
+          tooltipText: "{title}",
+          tooltipY: 0,
+
+          fill: am5.color(0xbcf9ac),
           stroke: root.interfaceColors.get("background"),
           strokeWidth: 2
         });
@@ -357,8 +377,8 @@ const GlobalMap = () => {
       ]
   
 
-      citySeries.data.setAll(contries.concat(states));
-
+      citySeries.data.setAll(contries);
+      stateSeries.data.setAll(states);
       
       // Prepare line series data
       // let destinations = contries.map(item=>item.id);
@@ -375,74 +395,112 @@ const GlobalMap = () => {
         "japan": ['new_york','california', 'illinois']
       };
 
-
+      var arrowSeries = chart.series.push(
+        am5map.MapPointSeries.new(root, {})
+      );
       // this will do all the animations
       am5.array.each(Object.keys(destMap), function(did) {
 
         var destinationDataItem = citySeries.getDataItemById(did);
 
-        for(let i = 0; i < destMap[did].length; i++){
-          let originDataItem = citySeries.getDataItemById(destMap[did][i]);
+        for(let i = 0; i < 1; i++){
+          let originDataItem = stateSeries.getDataItemById(destMap[did][i]);
           let lineDataItem = lineSeries.pushDataItem({});
           lineDataItem.set("pointsToConnect", [destinationDataItem,originDataItem])
-  
-          var startDataItem = animatedBulletSeries.pushDataItem({});
-          startDataItem.setAll({
-            lineDataItem: lineDataItem,
-            positionOnLine: 0
+          // lineSeries.pushDataItem({
+          //   pointsToConnect: [destinationDataItem, originDataItem]
+          // });
+          
+          lineSeries.mapLines.template.setAll({
+            stroke: am5.color(0xffba00),
+            strokeWidth: 2,
+            strokeOpacity: 1
           });
-  
-          var endDataItem = animatedBulletSeries.pushDataItem({});
-          endDataItem.setAll({
-            lineDataItem: lineDataItem,
-            positionOnLine: 1
+
+          
+
+          arrowSeries.bullets.push(function() {
+            var arrow = am5.Graphics.new(root, {
+              fill: am5.color(0xffba00),
+              stroke: am5.color(0xffba00),
+              draw: function (display) {
+                display.moveTo(0, -6);
+                display.lineTo(16, 0);
+                display.lineTo(0, 6);
+                display.lineTo(0, -6);
+              }
+            });
+
+            return am5.Bullet.new(root, {
+              sprite: arrow
+            });
           });
+          
+          arrowSeries.pushDataItem({
+            lineDataItem: lineDataItem,
+            positionOnLine: 0.5,
+            autoRotate: true
+          });
+          // var startDataItem = animatedBulletSeries.pushDataItem({});
+          // startDataItem.setAll({
+          //   lineDataItem: lineDataItem,
+          //   positionOnLine: 0
+          // });
   
-          var animatedLineDataItem = animatedLineSeries.pushDataItem({});
-          animatedLineDataItem.set("pointsToConnect", [endDataItem,startDataItem])
+          // var endDataItem = animatedBulletSeries.pushDataItem({});
+          // endDataItem.setAll({
+          //   lineDataItem: lineDataItem,
+          //   positionOnLine: 1
+          // });
   
-          var lon0 = originDataItem.get("longitude");
-          var lat0 = originDataItem.get("latitude");
+          // var animatedLineDataItem = animatedLineSeries.pushDataItem({});
+          // animatedLineDataItem.set("pointsToConnect", [endDataItem,startDataItem])
   
-          var lon1 = destinationDataItem.get("longitude");
-          var lat1 = destinationDataItem.get("latitude");
+          // var lon0 = originDataItem.get("longitude");
+          // var lat0 = originDataItem.get("latitude");
+  
+          // var lon1 = destinationDataItem.get("longitude");
+          // var lat1 = destinationDataItem.get("latitude");
           
   
-          var distance = Math.hypot(lon1 - lon0, lat1 - lat0);
-          var duration = distance * 100;
-  
-          animateStart(endDataItem,startDataItem,duration);
+          // var distance = Math.hypot(lon1 - lon0, lat1 - lat0);
+          // var duration = distance * 100;
+          
+
+
+
+          // animateStart(endDataItem,startDataItem,duration);
         }
         
       });
 
-      function animateStart(startDataItem, endDataItem, duration) {
+      // function animateStart(startDataItem, endDataItem, duration) {
 
-        var startAnimation = startDataItem.animate({
-          key: "positionOnLine",
-          from: 0,
-          to: 1,
-          duration: duration
-        });
+      //   var startAnimation = startDataItem.animate({
+      //     key: "positionOnLine",
+      //     from: 0,
+      //     to: 1,
+      //     duration: duration
+      //   });
 
-        startAnimation.events.on("stopped", function() {
-          animateEnd(startDataItem, endDataItem, duration);
-        });
-      }
+      //   startAnimation.events.on("stopped", function() {
+      //     animateEnd(startDataItem, endDataItem, duration);
+      //   });
+      // }
 
-      function animateEnd(startDataItem, endDataItem, duration) {
-        startDataItem.set("positionOnLine", 0)
-        var endAnimation = endDataItem.animate({
-          key: "positionOnLine",
-          from: 0,
-          to: 1,
-          duration: duration
-        })
+      // function animateEnd(startDataItem, endDataItem, duration) {
+      //   startDataItem.set("positionOnLine", 0)
+      //   var endAnimation = endDataItem.animate({
+      //     key: "positionOnLine",
+      //     from: 0,
+      //     to: 1,
+      //     duration: duration
+      //   })
 
-        endAnimation.events.on("stopped", function() {
-          animateStart(startDataItem, endDataItem, duration);
-        });
-      }
+      //   endAnimation.events.on("stopped", function() {
+      //     animateStart(startDataItem, endDataItem, duration);
+      //   });
+      // }
 
 
       let previousPolygon;
@@ -510,8 +568,11 @@ const GlobalMap = () => {
                     countrySeries.show();
                     polygonSeries.hide();
                     citySeries.hide();
+                    arrowSeries.hide();
                     lineSeries.hide();
-                    animatedLineSeries.hide();
+                    // animatedLineSeries.hide();
+
+
                     homeButton.show();
                     heatLegend.show();
                     toggleButton.show();
@@ -753,10 +814,11 @@ const GlobalMap = () => {
         heatLegend.hide();
         toggleButton.hide();
 
+        arrowSeries.show();
         polygonSeries.show();
         citySeries.show();
         lineSeries.show();
-        animatedLineSeries.show();
+        // animatedLineSeries.show();
       });
 
       return () => {
