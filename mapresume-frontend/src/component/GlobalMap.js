@@ -190,11 +190,11 @@ const GlobalMap = () => {
       });
 
       // this will be visible line. Lines will connectg animating points so they will look like animated
-      let animatedLineSeries = chart.series.push(am5map.MapLineSeries.new(root, {}));
-      animatedLineSeries.mapLines.template.setAll({
-        stroke: root.interfaceColors.get("alternativeBackground"),
-        strokeOpacity: 0.6
-      });
+      // let animatedLineSeries = chart.series.push(am5map.MapLineSeries.new(root, {}));
+      // animatedLineSeries.mapLines.template.setAll({
+      //   stroke: root.interfaceColors.get("alternativeBackground"),
+      //   strokeOpacity: 0.6
+      // });
 
       // destination series
       var citySeries = chart.series.push(
@@ -240,19 +240,19 @@ const GlobalMap = () => {
       });
 
       // invisible series which will animate along invisible lines
-      var animatedBulletSeries = chart.series.push(
-        am5map.MapPointSeries.new(root, {})
-      );
+      // var animatedBulletSeries = chart.series.push(
+      //   am5map.MapPointSeries.new(root, {})
+      // );
 
-      animatedBulletSeries.bullets.push(function() {
-        var circle = am5.Circle.new(root, {
-          radius: 0
-        });
+      // animatedBulletSeries.bullets.push(function() {
+      //   var circle = am5.Circle.new(root, {
+      //     radius: 0
+      //   });
 
-        return am5.Bullet.new(root, {
-          sprite: circle
-        });
-      });
+      //   return am5.Bullet.new(root, {
+      //     sprite: circle
+      //   });
+      // });
 
       const contries = [
         {
@@ -413,7 +413,7 @@ const GlobalMap = () => {
           
           lineSeries.mapLines.template.setAll({
             stroke: am5.color(0xffba00),
-            strokeWidth: 2,
+            strokeWidth: 1.3,
             strokeOpacity: 1
           });
 
@@ -424,10 +424,10 @@ const GlobalMap = () => {
               fill: am5.color(0xffba00),
               stroke: am5.color(0xffba00),
               draw: function (display) {
-                display.moveTo(0, -6);
-                display.lineTo(16, 0);
-                display.lineTo(0, 6);
-                display.lineTo(0, -6);
+                display.moveTo(0, -5);
+                display.lineTo(10, 0);
+                display.lineTo(0, 5);
+                display.lineTo(0, -5);
               }
             });
 
@@ -568,6 +568,7 @@ const GlobalMap = () => {
                     countrySeries.show();
                     polygonSeries.hide();
                     citySeries.hide();
+                    stateSeries.hide();
                     arrowSeries.hide();
                     lineSeries.hide();
                     // animatedLineSeries.hide();
@@ -738,21 +739,76 @@ const GlobalMap = () => {
               expLevelSelect.multiple = true;
               expLevelSelect.id = "multiJobSelectDropdown";
 
-              ["All","Computer Software", "Tech", "Manufactory", "Banking", "Retail", "Option 7", "Option 8"].forEach(optionText => {
+              const industryName = [
+                  "All",
+                  "Staffing and Recruiting", 
+                  "Hospitals and Health Care", 
+                  "IT Services and IT Consulting", 
+                  "Software Development", 
+                  "Financial Services", 
+                  "Retail", 
+                  "Non-profit Organizations", 
+                  "Construction", 
+                  "Insurance", 
+                  "Accounting", 
+                  "Government Administration", 
+                  "Real Estate",
+                  "Telecommunications",
+                  'Manufacturing',
+                  'Advertising Services',
+                  'Higher Education',
+                  'Technology, Information and Internet',
+                  'Banking',
+                ];
+              const companyIndsutry = [
+                  "All",
+                  "Staffing & Recruiting",
+                  "Information Technology & Services",
+                  'Staffing and Recruiting',
+                  'Computer Software',
+                  'Hospital & Health Care',
+                  'Financial Services',
+                  'Retail',
+                  'Hospital and Health Care',
+                  'Insurance',
+                  'Higher Education',
+                  'Software Development',
+                  'Government Administration',
+                  'Real Estate',
+                  'IT Services and IT Consulting',
+                  'Human Resources',
+                  'Transportation/Trucking/Railroad',
+                  'Construction',
+                  'Non-profit Organization Management',
+                  'Telecommunications',
+                  'Restaurants'
+                ]
+              const expLevel = [
+                'All',
+                'Entry level',
+                'Mid-Senior level',
+                'Associate',
+                'Director',
+                'Executive',
+                'Internship',
+  
+              ]
+              companyIndsutry.forEach(optionText => {
                   let option = document.createElement("option");
                   option.value = optionText;
                   option.text = optionText;
                   companyIndsutrySelect.appendChild(option);
               });
 
-              ["All","Insurance", "Software Engineer", "Data Analyst", "Quant Researcher", "Option 6", "Option 7", "Option 8"].forEach(optionText => {
+              
+              industryName.forEach(optionText => {
                 let option = document.createElement("option");
                 option.value = optionText;
                 option.text = optionText;
                 jobIndsutrySelect.appendChild(option);
               });
 
-              ["All","Internship", "Entry level", "Intermediate Level", "Senior Level", "VP Level", "Elementary School"].forEach(optionText => {
+              expLevel.forEach(optionText => {
                 let option = document.createElement("option");
                 option.value = optionText;
                 option.text = optionText;
@@ -817,6 +873,7 @@ const GlobalMap = () => {
         arrowSeries.show();
         polygonSeries.show();
         citySeries.show();
+        stateSeries.show();
         lineSeries.show();
         // animatedLineSeries.show();
       });
