@@ -11,15 +11,11 @@ import '../assets/style/Charts.css';
 
 export default function ChartCards() {
     const navigate = useNavigate();
-    const goHeatMap = ()=>{
-        navigate('/charts/heatmap');
-
-    }
     return (
         <div className='chart-container'>
 
              <Card sx={{ maxWidth: 345 }}>
-                <CardActionArea onClick={goHeatMap}>
+                <CardActionArea onClick={()=>{navigate('/charts/heatmap');}}>
                     <CardMedia
                         component="img"
                         height="140"
@@ -39,7 +35,7 @@ export default function ChartCards() {
             </Card>
             
             <Card sx={{ maxWidth: 345 }}>
-                <CardActionArea>
+                <CardActionArea onClick={()=>{navigate('/charts/scatter');}}>
                     <CardMedia
                         component="img"
                         height="140"
@@ -51,12 +47,13 @@ export default function ChartCards() {
                         Scatter plot
                         </Typography>
                         <Typography variant="body2" color="text.secondary">
-                        This is a scatter plot for some of our important data.
+                        This is a scatter plot for some key data points.
                         </Typography>
                     </CardContent>
                     
                 </CardActionArea>
             </Card>
+
         </div>
      
     );

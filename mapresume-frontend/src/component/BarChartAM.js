@@ -195,6 +195,10 @@ export default function BarChartAM({data}) {
         });
     },[])
     return (
-        <div id="chartdivcol" style={{ width: "100%", height: "400px" }}></div>
+        <div>
+            <h2>Job Location</h2>
+            <div id="chartdivcol" style={{ width: "100%", height: "400px" }}></div>
+
+        </div>
     )
 }
