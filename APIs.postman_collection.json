@@ -1,0 +1,60 @@
+{
+	"info": {
+		"_postman_id": "028a1ddf-2e6f-4600-ae4f-b41cbb85b81c",
+		"name": "APIs",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26227073"
+	},
+	"item": [
+		{
+			"name": "New Request",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://cmpt733functionapp1.azurewebsites.net/api/jobs_average_salary?name={{name}}",
+					"protocol": "https",
+					"host": [
+						"cmpt733functionapp1",
+						"azurewebsites",
+						"net"
+					],
+					"path": [
+						"api",
+						"jobs_average_salary"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "{{name}}"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"pm.test(\"Body is correct\", function () {",
+					"    var response = pm.response.text();",
+					"    pm.expect(response).to.include(\"Hello, \" + pm.variables.get(\"name\") + \". This HTTP triggered function executed successfully.\");",
+					"});"
+				]
+			}
+		}
+	]
+}

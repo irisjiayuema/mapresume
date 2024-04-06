@@ -1,0 +1,28 @@
+/* 多选下拉框样式 */
+#multiSelectDropdown {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #cccccc; /* 添加边框 */
+  border-radius: 5px; /* 圆角 */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* 轻微的阴影效果 */
+  background-color: #ffffff; /* 背景色 */
+}
+
+/* 按钮通用样式 */
+.modal-button {
+  padding: 10px 20px;
+  margin: 5px;
+  border: none; /* 移除边框 */
+  border-radius: 5px; /* 圆角 */
+  color: #ffffff; /* 字体颜色 */
+  background-color: #007bff; /* 背景颜色 */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* 阴影效果 */
+  cursor: pointer; /* 鼠标悬停效果 */
+  transition: background-color 0.3s, box-shadow 0.3s; /* 过渡动画 */
+}
+
+.modal-button:hover {
+  background-color: #0056b3; /* 鼠标悬停时的背景色 */
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* 鼠标悬停时的阴影 */
+}
