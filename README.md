@@ -2,8 +2,7 @@
 
 ## CMPT 733 Final Project
 
-## Video
-https://youtu.be/QRmiVC7k4V4
+Video: https://youtu.be/QRmiVC7k4V4
 
 Website (Live until April 9, 2024): http://54.213.254.255/
 
