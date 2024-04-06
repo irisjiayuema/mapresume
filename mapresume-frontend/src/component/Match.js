@@ -12,9 +12,16 @@ import PieChartAM from './PieChartAM.js';
 import BarChartAM from './BarChartAM.js';
 import JobIndustryBar from './JobIndustryBar.js';
 import { DataGrid } from '@mui/x-data-grid';
-
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
 
 function Match() {
+  
   const mockData = [
     {
       company_name: 'Google',
@@ -28,8 +35,10 @@ function Match() {
       compensation_type:'BASE_SALARY',
       currency:'USD',
       work_type:'CONTRACT',
-      med_salary:'100000',
-      state_abbr: 'CA'
+      med_salary: 100000,
+      state_abbr: 'CA',
+      views: 200,
+      applies: 120
 
     }, {
       company_name: 'Facebook',
@@ -43,8 +52,11 @@ function Match() {
       compensation_type:'BASE_SALARY',
       currency:'USD',
       work_type:'CONTRACT',
-      med_salary:'100000',
-      state_abbr: 'CA'
+      med_salary: 100000,
+      state_abbr: 'CA',
+      views: 100,
+      applies: 28
+
 
   },{
       company_name: 'Another Company',
@@ -58,8 +70,10 @@ function Match() {
       compensation_type:'BASE_SALARY',
       currency:'USD',
       work_type:'CONTRACT',
-      med_salary:'100000',
-      state_abbr: 'NY'
+      med_salary: 100000,
+      state_abbr: 'NY',
+      views: 300,
+      applies: 21
   }];
 
   const columns = [
@@ -95,9 +109,29 @@ function Match() {
   const [jobIndustryData, setJobIndustryData] = useState([]);
   const [statAnalysis, setStatAnalysis] = useState([]);
 
+  const [summaryRows, setSummaryRows] = useState([]);
+
+
   const handleFileChange = (event) => {
     setFile(event.target.files[0]);
   };
+
+  const calSummary = (data,name) => {
+    data = data.filter(value => value !== null);
+    data.sort((a, b) => a - b);
+
+    const mean = parseFloat((data.reduce((acc, value) => acc + value, 0) / data.length).toFixed(2));
+    const std = parseFloat((Math.sqrt(data.reduce((acc, value) => acc + Math.pow(value - mean, 2), 0) / data.length)).toFixed(2));
+
+    const min = data[0]; 
+    const max = data[data.length - 1]; 
+
+    const twentyFifth = data[Math.floor(data.length * 0.25)];
+    const fiftieth = data[Math.floor(data.length * 0.5)];
+    const seventyFifth = data[Math.floor(data.length * 0.75)];
+    return {name, mean, std, min, max, twentyFifth, fiftieth, seventyFifth};
+  }
+
 
   const matchResume = async () => {
     if (!file) {
@@ -153,6 +187,14 @@ function Match() {
     }else{
       return;
     }
+
+    setSummaryRows(
+      [
+        calSummary(matchData.map((job) => job.views),'Views'),
+        calSummary(matchData.map((job) => job.applies),'Applies'),
+        calSummary(matchData.map((job) => job.med_salary),'Salary'),
+      ]
+    );
 
     const skillCount = matchData.reduce((acc, {skill_name}) => {
       acc[skill_name] = (acc[skill_name] || 0) + 1;
@@ -259,6 +301,50 @@ function Match() {
           </div> */}
         </div>
       )}
+      {matchData.length > 0 && isDisplaying && (
+      <div>
+            <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+              <TableHead>
+                <TableRow>
+                  <TableCell>Name</TableCell>
+                  <TableCell align="right">Mean</TableCell>
+                  <TableCell align="right">Standard</TableCell>
+                  <TableCell align="right">Min</TableCell>
+                  <TableCell align="right">Max</TableCell>
+                  <TableCell align="right">25%</TableCell>
+                  <TableCell align="right">50%</TableCell>
+                  <TableCell align="right">70%</TableCell>
+
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {summaryRows.map((row) => (
+                  <TableRow
+                    key={row.name}
+                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                  >
+                    <TableCell component="th" scope="row">
+                      {row.name}
+                    </TableCell>
+                    <TableCell align="right">{row.mean}</TableCell>
+                    <TableCell align="right">{row.std}</TableCell>
+                    <TableCell align="right">{row.min}</TableCell>
+                    <TableCell align="right">{row.max}</TableCell>
+                    <TableCell align="right">{row.twentyFifth}</TableCell>
+                    <TableCell align="right">{row.fiftieth}</TableCell>
+                    <TableCell align="right">{row.seventyFifth}</TableCell>
+
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+
+      </div>)}
+      
+
+
 
       {isMatched && <Box sx={{ '& > :not(style)': { m: 1 } }}>
         <Fab variant="extended" size="medium" color="primary" onClick={()=>setIsDisplaying(!isDisplaying)}>
@@ -266,6 +352,7 @@ function Match() {
         </Fab>
       </Box>}
       
+
       <div style={{display: isChartVisible ? 'block' : 'none'}}>{jobIndustryData && jobIndustryData.length > 0 && <JobIndustryBar data={jobIndustryData} />}</div>
       <div style={{display: isChartVisible ? 'block' : 'none'}}>{pieData && pieData.length > 0 && <PieChartAM data={pieData} />}</div>
       <div style={{display: isChartVisible ? 'block' : 'none'}}>{barData && barData.length > 0 && <BarChartAM data={barData} />}</div>
